@@ -1,7 +1,6 @@
 # TP1 – Mon premier service REST avec Spring Boot
 
 **Nom :** Rym Razgui  
-**Groupe :** _(à compléter)_
 
 ## Description
 
