@@ -3,9 +3,14 @@ package com.sesame.todo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +43,36 @@ public class TacheController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(t);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<Tache> creer(@RequestBody Tache tache) {
+        tache.setId(compteur++);
+        taches.add(tache);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tache);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tache> modifier(@PathVariable Long id, @RequestBody Tache nouvelle) {
+        Tache t = chercher(id);
+        if (t == null) {
+            return ResponseEntity.notFound().build();
+        }
+        t.setTitre(nouvelle.getTitre());
+        t.setTerminee(nouvelle.isTerminee());
+        return ResponseEntity.ok(t);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> supprimer(@PathVariable Long id) {
+        Tache t = chercher(id);
+        if (t == null) {
+            return ResponseEntity.notFound().build();
+        }
+        taches.remove(t);
+        return ResponseEntity.noContent().build();
     }
 
     // Retourne la tâche correspondante ou null
